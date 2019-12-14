@@ -10,6 +10,7 @@ dependencies:
 - persistent-postgresql
 - persistent-template
 - monad-logger
+- mtl
 executables:
   app:
     source-dirs: src

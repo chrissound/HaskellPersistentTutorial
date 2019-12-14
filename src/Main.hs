@@ -13,37 +13,30 @@ import           Database.Persist.TH
 import           Database.Persist.Postgresql
 import           Control.Monad.IO.Class  (liftIO)
 import           Control.Monad.Logger    (runStderrLoggingT)
+import Data.List (find)
+import User
+import Data.String
 
-share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Person
-    name String
-    age Int Maybe
-    deriving Show
-BlogPost
-    title String
-    authorId PersonId
-    deriving Show
-|]
 
 dbConStr :: ConnectionString
 dbConStr = "host=127.0.0.1 port=5432 user=postgres dbname=postgres password=mysecretpassword"
 
 main :: IO ()
-main = runStderrLoggingT $ withPostgresqlPool dbConStr 10 $ \pool -> liftIO $ do
+main = do
+  let input = [
+          ("id", "1")
+        , ("name", "Chris")
+        , ("age", "100")
+        ]
+  let x = Person "" Nothing
+  print x
+  let inputId = case lookup "id" input of
+        Just x -> read x
+        Nothing -> error "no id specified"
+
+  runStderrLoggingT $ withPostgresqlPool dbConStr 10 $ \pool -> liftIO $ do
     flip runSqlPersistMPool pool $ do
       runMigration migrateAll
 
-      johnId <- insert $ Person "John Doe" $ Just 35
-      janeId <- insert $ Person "Jane Doe" Nothing
-
-      insert $ BlogPost "My fr1st p0st" johnId
-      insert $ BlogPost "One more for good measure" johnId
-
-      oneJohnPost <- selectList [BlogPostAuthorId ==. johnId] [LimitTo 1]
-      liftIO $ print (oneJohnPost :: [Entity BlogPost])
-
-      john <- get johnId
-      liftIO $ print (john :: Maybe Person)
-
-      delete janeId
-      deleteWhere [BlogPostAuthorId ==. johnId]
+      maybePerson <- getUser inputId
+      liftIO $ print $ maybePerson

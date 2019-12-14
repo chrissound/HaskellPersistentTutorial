@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1d07fd558017e227daf787b9c14d37b8f9b87ed02bef288e9689b83b26c0bc7e
+-- hash: ab4b9b178ddc108e13a83cc34125c80ed36528ba32ce043cc326a02e8abab409
 
 name:                HaskellNixCabalStarter
 version:             0.1.0.0
@@ -16,12 +16,14 @@ build-type:          Simple
 executable app
   main-is: Main.hs
   other-modules:
+      User
       Paths_HaskellNixCabalStarter
   hs-source-dirs:
       src
   build-depends:
       base >=4.12 && <4.13
     , monad-logger
+    , mtl
     , persistent
     , persistent-postgresql
     , persistent-sqlite
