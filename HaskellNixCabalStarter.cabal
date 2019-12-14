@@ -1,0 +1,22 @@
+cabal-version:       >=1.10
+name:                HaskellNixCabalStarter
+version:             0.1.0.0
+-- synopsis:
+-- description:
+-- bug-reports:
+-- license:
+license-file:        LICENSE
+author:              HaskellNixCabalStarter
+maintainer:          HaskellNixCabalStarter
+-- copyright:
+-- category:
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+executable app
+  main-is:             Main.hs
+  -- other-modules:
+  -- other-extensions:
+  build-depends:       base >=4.12 && <4.13
+  -- hs-source-dirs:
+  default-language:    Haskell2010
