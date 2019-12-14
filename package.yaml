@@ -5,6 +5,9 @@ maintainer: HaskellNixCabalStarter
 license: OtherLicense
 dependencies:
 - base >=4.12 && <4.13
+- persistent
+- persistent-sqlite
+- persistent-template
 executables:
   app:
     source-dirs: src
