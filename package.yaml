@@ -7,7 +7,9 @@ dependencies:
 - base >=4.12 && <4.13
 - persistent
 - persistent-sqlite
+- persistent-postgresql
 - persistent-template
+- monad-logger
 executables:
   app:
     source-dirs: src
