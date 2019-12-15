@@ -21,6 +21,11 @@ import Data.String
 dbConStr :: ConnectionString
 dbConStr = "host=127.0.0.1 port=5432 user=postgres dbname=postgres password=mysecretpassword"
 
+usermapper :: String -> String -> Update Person
+usermapper "name" = (PersonName =.)
+usermapper "age" = (PersonAge =.) . Just . read
+usermapper _ = error "Invalid field"
+
 main :: IO ()
 main = do
   let input = [
@@ -34,9 +39,14 @@ main = do
         Just x -> read x
         Nothing -> error "no id specified"
 
+  let updates = fmap (\(a,b) -> usermapper a b) $ tail input
+
   runStderrLoggingT $ withPostgresqlPool dbConStr 10 $ \pool -> liftIO $ do
     flip runSqlPersistMPool pool $ do
       runMigration migrateAll
 
       maybePerson <- getUser inputId
+      liftIO $ print "Found user:"
       liftIO $ print $ maybePerson
+
+      update (toSqlKey 10) updates
